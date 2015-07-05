@@ -48,16 +48,25 @@ class CommunicationCall extends React.Component {
 
 
 var SearchBar = React.createClass({
+    handleChange: function() {
+        this.props.onValueChange(
+            this.refs.filterTextInput.getDOMNode().value,
+        );
+    },
     render: function() {
         return (
-            <form>
-                <input type="text" placeholder="Search..." />
-                <p>
-                    <input type="checkbox" />
-                    {' '}
-                    Only show products in stock
-                </p>
-            </form>
+            
+                <input className="style-1"
+                    type="number"
+                    min="40000"
+                    max="500000"
+                    placeholder="Loan Amount..."
+                    name="loanInputAmount"
+                    //value={this.props.loan_amount}
+                    ref="filterTextInput"
+                    //onSubmit="return false"
+                />
+            
         );
     }
 });
@@ -66,7 +75,7 @@ var SearchBar = React.createClass({
 let Main = React.createClass({
 
   getInitialState: function() {
-    return {focused: suburbdb({median_house: {gte:1000000}}).get()[0], loan_amount: 200000};
+    return {focused: suburbdb({median_house: {gte:1000000}}).get()[0], loan_amount: 200000, filters: {library: 1, primary_school: 1, secondary_school: 1, hospital: 1, police: 1}};
   },
 
   childContextTypes: {
@@ -86,16 +95,43 @@ let Main = React.createClass({
   },
 
   handleFoucsedSuburb(suburb){
-    this.setState({focused: suburbdb({suburb_name: suburb}).get()[0], loan_amount: this.state.loan_amount});
+    this.setState({focused: suburbdb({suburb_name: suburb}).get()[0], loan_amount: this.state.loan_amount, filters: this.state.filters});
   }, 
 
   _handleCustomDialogSubmit() {
     this.refs.settingsDialog.dismiss();
+    var loan_amount = parseInt(document.getElementsByName("loanInputAmount")[0].value);
+    console.log(document.getElementsByName("loanInputAmount")[0].value);
+    this.setState({focused: suburbdb({median_house: {gte:this.state.loan_amount}}).get()[0], loan_amount: loan_amount, filters: this.state.filters});
+    console.log(this.state);
   },
 
-  handLoanInputChange(e, value){
-    var loanAmountValue = (value * 460000) + 40000;
-    this.setState({focused: this.state.focused, loan_amount: loanAmountValue});
+  openSettingsDialog(){
+    this.refs.settingsDialog.show();
+  },
+
+  handLoanInputChange(value){
+    this.setState({focused: this.state.focused, loan_amount: value, filters: this.state.filters});
+  },
+
+  handleLibrarySwitch(){
+    this.state.filters.library = 1 - this.state.filters.library;
+  },
+
+  handlePrimarySwitch(){
+    this.state.filters.primary_school = 1 - this.state.filters.primary_school;
+  },
+
+  handleSecondarySwitch(){
+    this.state.filters.secondary_school = 1 - this.state.filters.secondary_school;
+  },
+
+  handlePoliceSwitch(){
+    this.state.filters.police = 1 - this.state.filters.police;
+  },
+
+  handleHospitalSwitch(){
+    this.state.filters.hospital = 1 - this.state.filters.hospital;
   },
 
   render() {
@@ -126,39 +162,44 @@ let Main = React.createClass({
   openImmediately={true}
   modal={this.state.modal}
   ref="settingsDialog">
-    <p className="loanAmountValue">${this.state.loan_amount}</p>
-    <Slider name="slider2" defaultValue={.5} onChange={this.handLoanInputChange}/>
+  <SearchBar loan_amount={this.state.loan_amount} onValueChange={this.handLoanInputChange}/>
+   
     <Checkbox
         name="primary_school"
         value="PrimarySchool"
         label="Primary school"
+        onCheck={this.handlePrimarySwitch}
         defaultChecked={true}/>
     <Checkbox
         name="secondary_school"
         value="SecondarySchool"
         label="Secondary school"
+        onCheck={this.handleSecondarySwitch}
         defaultChecked={true}/>
     <Checkbox
         name="libraries"
         value="Libraries"
         label="Libraries"
+        onCheck={this.handleSecondarySwitch}
         defaultChecked={true}/>
     <Checkbox
         name="hospital"
         value="hospital"
         label="Hospital"
+        onCheck={this.handleHospitalSwitch}
         defaultChecked={true}/>
     <Checkbox
         name="police_station"
         value="PoliceStation"
         label="Police station"
+        onCheck={this.handlePoliceSwitch}
         defaultChecked={true}/>
 
-        <SearchBar/>
+        
 
 
 </Dialog>
-          <ResultsPane focused={this.state.focused} onSuburbChange={this.handleFoucsedSuburb}/> 
+          <ResultsPane loan_amount={this.state.loan_amount} filters={this.state.filters} focused={this.state.focused} onSuburbChange={this.handleFoucsedSuburb} onSettingsActivated={this.openSettingsDialog}/> 
           <DetailsPane focused={this.state.focused}/>
         </div>
     );
@@ -169,13 +210,16 @@ let Main = React.createClass({
 
 var ResultsPane = React.createClass({
   render: function(){
+    var data = suburbdb({median_house: {lte:this.props.loan_amount}}).get();
+
+
     return (
         <div className="resultsPane" style={{ width: '570px',
                                               position: 'absolute',
                                               height: '100%',
                                               backgroundColor: 'rgb(244, 244, 244)'}}>
-          <ResultsAppBar />
-          <ResultsGrid data={dummyDat} focused={this.props.focused} onSuburbChange={this.props.onSuburbChange}/>
+          <ResultsAppBar onSettingsActivated={this.props.onSettingsActivated}/>
+          <ResultsGrid data={data} focused={this.props.focused} onSuburbChange={this.props.onSuburbChange} />
 
         </div>
       );
@@ -186,7 +230,7 @@ var ResultsAppBar = React.createClass({
   render: function(){
     return (
       <div className="resultsAppBar" >
-        <AppBar style={{backgroundColor: '#2095F2'}} title='Results' iconClassNameRight="muidocs-icon-navigation-expand-more"/>
+        <AppBar style={{backgroundColor: '#2095F2'}} title='Results' iconClassNameRight="muidocs-icon-navigation-expand-more" onLeftIconButtonTouchTap={this.props.onSettingsActivated}/>
       </div>
     );
   }
