@@ -13,6 +13,7 @@ let React = require('react');
 let mui = require('material-ui');
 let RaisedButton = mui.RaisedButton;
 let Dialog = mui.Dialog;
+let FlatButton = mui.FlatButton;
 let AppBar = mui.AppBar;
 let List = mui.List;
 let ListItem = mui.ListItem;
@@ -24,6 +25,8 @@ let ThemeManager = new mui.Styles.ThemeManager();
 let Colors = mui.Styles.Colors;
 let SvgIcon = mui.SvgIcon;
 let Avatar = mui.Avatar;
+let Slider = mui.Slider;
+let Checkbox = mui.Checkbox;
 
 let ActionInfo = require('./svg-icons/action-info.jsx');
 let Tick = require('./svg-icons/tick.jsx');
@@ -44,11 +47,26 @@ class CommunicationCall extends React.Component {
 }
 
 
+var SearchBar = React.createClass({
+    render: function() {
+        return (
+            <form>
+                <input type="text" placeholder="Search..." />
+                <p>
+                    <input type="checkbox" />
+                    {' '}
+                    Only show products in stock
+                </p>
+            </form>
+        );
+    }
+});
+
 
 let Main = React.createClass({
 
   getInitialState: function() {
-    return {focused: suburbdb({median_house: {gte:1000000}}).get()[0]};
+    return {focused: suburbdb({median_house: {gte:1000000}}).get()[0], loan_amount: 200000};
   },
 
   childContextTypes: {
@@ -68,10 +86,27 @@ let Main = React.createClass({
   },
 
   handleFoucsedSuburb(suburb){
-    this.setState({focused: suburbdb({suburb_name: suburb}).get()[0]})
+    this.setState({focused: suburbdb({suburb_name: suburb}).get()[0], loan_amount: this.state.loan_amount});
   }, 
 
+  _handleCustomDialogSubmit() {
+    this.refs.settingsDialog.dismiss();
+  },
+
+  handLoanInputChange(e, value){
+    var loanAmountValue = (value * 460000) + 40000;
+    this.setState({focused: this.state.focused, loan_amount: loanAmountValue});
+  },
+
   render() {
+
+
+    var customActions = [
+    <FlatButton
+      label="Done"
+      primary={true}
+      onTouchTap={this._handleCustomDialogSubmit} />
+  ];
 
     let containerStyle = {
       textAlign: 'center',
@@ -79,20 +114,54 @@ let Main = React.createClass({
     };
 
     let standardActions = [
-      { text: 'Okay' }
+      { text: 'Done' }
     ];
 
     return (
         <div style={{overflow: 'scroll',
                     height: '100%'}}>
+<Dialog
+  title="Affordably"
+  actions={customActions}
+  openImmediately={true}
+  modal={this.state.modal}
+  ref="settingsDialog">
+    <p className="loanAmountValue">${this.state.loan_amount}</p>
+    <Slider name="slider2" defaultValue={.5} onChange={this.handLoanInputChange}/>
+    <Checkbox
+        name="primary_school"
+        value="PrimarySchool"
+        label="Primary school"
+        defaultChecked={true}/>
+    <Checkbox
+        name="secondary_school"
+        value="SecondarySchool"
+        label="Secondary school"
+        defaultChecked={true}/>
+    <Checkbox
+        name="libraries"
+        value="Libraries"
+        label="Libraries"
+        defaultChecked={true}/>
+    <Checkbox
+        name="hospital"
+        value="hospital"
+        label="Hospital"
+        defaultChecked={true}/>
+    <Checkbox
+        name="police_station"
+        value="PoliceStation"
+        label="Police station"
+        defaultChecked={true}/>
+
+        <SearchBar/>
+
+
+</Dialog>
           <ResultsPane focused={this.state.focused} onSuburbChange={this.handleFoucsedSuburb}/> 
           <DetailsPane focused={this.state.focused}/>
         </div>
     );
-  },
-
-  _handleTouchTap() {
-    this.refs.superSecretPasswordDialog.show();
   }
 
 
