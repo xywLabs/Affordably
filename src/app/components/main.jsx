@@ -104,6 +104,7 @@ let Main = React.createClass({
     var loan_amount = parseInt(document.getElementsByName("loanInputAmount")[0].value);
     console.log(document.getElementsByName("loanInputAmount")[0].value);
     this.setState({focused: suburbdb({median_house: {gte:this.state.loan_amount}}).get()[0], loan_amount: loan_amount, filters: this.state.filters});
+    
     console.log(this.state);
   },
 
@@ -218,7 +219,8 @@ let Main = React.createClass({
 
 var ResultsPane = React.createClass({
   render: function(){
-    var data = suburbdb({median_house: {lte:this.props.loan_amount}}).get();
+    var data = suburbdb({median_house:{lte:this.props.loan_amount}}).order('median_house desc').limit(75).get();
+
 
 
     return (
@@ -235,14 +237,19 @@ var ResultsPane = React.createClass({
 });
 
 var ResultsAppBar = React.createClass({
+  dropDown: function(){
+
+  },
   render: function(){
     return (
       <div className="resultsAppBar" >
-        <AppBar style={{backgroundColor: '#2095F2'}} title='Results' iconClassNameRight="muidocs-icon-navigation-expand-more" onLeftIconButtonTouchTap={this.props.onSettingsActivated}/>
+        <AppBar style={{backgroundColor: '#2095F2'}} title='Results' iconClassNameRight="muidocs-icon-navigation-expand-more" onLeftIconButtonTouchTap={this.props.onSettingsActivated} onRightIconButtonTouchTap={this.dropDown}/>
       </div>
     );
   }
 });
+
+
 
 var ResultsGrid = React.createClass({
   render: function(){
@@ -323,7 +330,7 @@ var ResultInfo = React.createClass({
             <p> ${this.props.median_house.format()} </p>
           }
           secondaryTextLines={2}>
-            {name}
+            <span style={{fontSize: '12px'}}>{name}</span>
           </ListItem>
           <ListDivider />
           <ListItem style={{height: '50px'}}>
