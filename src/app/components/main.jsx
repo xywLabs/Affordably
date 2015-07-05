@@ -32,6 +32,7 @@ let ActionInfo = require('./svg-icons/action-info.jsx');
 let Tick = require('./svg-icons/tick.jsx');
 let Cross = require('./svg-icons/cross.jsx');
 let Story = require('./svg-icons/story.jsx');
+let Search = require('./svg-icons/search.jsx');
 
 
 class CommunicationCall extends React.Component {
@@ -153,47 +154,54 @@ let Main = React.createClass({
       { text: 'Done' }
     ];
 
+    let chlbxSt = {
+      float: 'left',
+      width: '25%'
+    }
+
     return (
         <div style={{overflow: 'scroll',
                     height: '100%'}}>
 <Dialog
-  title="Affordably"
   actions={customActions}
   openImmediately={true}
   modal={this.state.modal}
   ref="settingsDialog">
+  <img src="./images/AffordablyLogo.png" style={{width: '100px',
+  display: 'inline',
+  textAlign: 'center',
+  marginLeft: '300px'}}/>
   <SearchBar loan_amount={this.state.loan_amount} onValueChange={this.handLoanInputChange}/>
-   
-    <Checkbox
+   <div className="chkBoxes" style={{paddingTop: '10px'}}>
+    <Checkbox className="chkbx"
+    style={chlbxSt}
         name="primary_school"
         value="PrimarySchool"
-        label="Primary school"
+        label="Primary"
         onCheck={this.handlePrimarySwitch}
         defaultChecked={true}/>
-    <Checkbox
+    <Checkbox className="chkbx"
+        style={chlbxSt}
         name="secondary_school"
         value="SecondarySchool"
-        label="Secondary school"
+        label="Secondary"
         onCheck={this.handleSecondarySwitch}
         defaultChecked={true}/>
-    <Checkbox
+    <Checkbox className="chkbx"
+        style={chlbxSt}
         name="libraries"
         value="Libraries"
         label="Libraries"
         onCheck={this.handleSecondarySwitch}
         defaultChecked={true}/>
-    <Checkbox
+    <Checkbox className="chkbx"
+        style={chlbxSt}
         name="hospital"
         value="hospital"
         label="Hospital"
         onCheck={this.handleHospitalSwitch}
         defaultChecked={true}/>
-    <Checkbox
-        name="police_station"
-        value="PoliceStation"
-        label="Police station"
-        onCheck={this.handlePoliceSwitch}
-        defaultChecked={true}/>
+      </div>
 
         
 
