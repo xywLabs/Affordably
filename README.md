@@ -1,4 +1,5 @@
 # Affordably
+*This website may assist home buyers to make informed investment decisions that not only meet their social and lifestyle needs but are also within their financial/earning capabilities.*
 
 **Project Summary**  
 Within the current national economic climate, there has been much debate focussed around the impact of foreign real-estate investment on the affordability of housing for Australians, particularly for those people entering the housing market as first home owners.
@@ -13,13 +14,14 @@ Google's Geocaching, Distance Matrix and Static Street View Image data API's was
 
 The data informing our analysis of crime statistics, median house prices and population was sourced from complete and representative data sets (As mentioned below) and filtered from 2012 to 2014 inclusive to avoid incomplete data. Finally, the ABC Regional Bounty Data was used to provide further contextual news for each suburb.
 
-This website may assist home buyers to make informed investment decisions that not only meet their social and lifestyle needs but are also within their financial/earning capabilities.
-
-**Data Usage**
+**Data Usage**  
 Initally, we had the idea to process all Australian suburbs however we realized this would be extremely time consuming. Instead, we decided to focus on Victorian suburbs as a proof on concept. 
 
-We used Python/Excel for most the data crunching when comparing suburbs from different datasets. Firthermore, we took advantage of Googles Map based API's to help populate relevant suburb data we had not manually found. Elements including, Commute time to city,  all the suburb icons, the maps and locations were computed using Google's API's. 
+We used Python/Excel for most the data crunching when comparing suburbs from different datasets. Furthermore, we took full advantage of Googles Map based API's to help populate relevant suburb data that we had not manually found. Elements including, Commute time to city,  all the suburb icons, the maps and locations were computed using Google's API's. 
 
 We also felt it would be appropriate to include the ABC data set since we were able to find many stories relating to the suburbs we had data on. 
+  
+**Data Quality and Calculations**  
+What we found when comparing many different datasets was that there is a high chance that there will be fields with incomplete data. Understanding this, we decided to focus on a 3 year window from 2012 to 2014 to calculate percentage growths and other attributes. We found this range to be relevant and mostly complete.
 
 
