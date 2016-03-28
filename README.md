@@ -1,6 +1,16 @@
 # Affordably
 http://xywLabs.github.io/build/
 
+
+**Screen Recording**
+
+[![Screen Recording](https://img.youtube.com/vi/x79SL2_DQCM/0.jpg)](https://www.youtube.com/watch?v=x79SL2_DQCM)
+
+**Marketing Video**
+
+[![Marketing Video](https://img.youtube.com/vi/A-PQK5u9mO8/0.jpg)](https://www.youtube.com/watch?v=A-PQK5u9mO8)
+
+
 *This website may assist home buyers to make informed investment decisions that not only meet their social and lifestyle needs but are also within their financial/earning capabilities.*
 
 **Project Summary**  
@@ -25,5 +35,3 @@ We also felt it would be appropriate to include the ABC data set since we were a
   
 **Data Quality and Calculations**  
 What we found when comparing many different datasets was that there is a high chance that there will be fields with incomplete data. Understanding this, we decided to focus on a 3 year window from 2012 to 2014 to calculate percentage growths and other attributes. We found this range to be relevant and mostly complete.
-
-
